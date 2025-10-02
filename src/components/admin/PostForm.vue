@@ -92,6 +92,35 @@
           />
         </div>
 
+        <div>
+          <label for="series" class="block text-sm font-medium text-gray-700 mb-2">
+            Series
+          </label>
+          <select
+            id="series"
+            v-model="formData.series_id"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option :value="null">-</option>
+            <option v-for="s in series" :key="s.id" :value="s.id">
+              {{ s.title }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label for="order_in_series" class="block text-sm font-medium text-gray-700 mb-2">
+            Order in series
+          </label>
+          <input
+            id="order_in_series"
+            v-model.number="formData.order_in_series"
+            type="number"
+            min="1"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+
         <div class="sm:col-span-2">
           <label for="excerpt" class="block text-sm font-medium text-gray-700 mb-2">
             Excerpt
@@ -147,9 +176,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import Editor from '../Editor.vue'
-import type { Post } from '../../data/posts'
+import type { Post, Series } from '../../data/posts'
 
 const props = defineProps<{
   post: Post | null
@@ -163,6 +192,16 @@ const emit = defineEmits<{
 
 const formData = ref<any>({})
 const categories = ['announcement', 'tutorials', 'programming', 'design', 'technology']
+const series = ref<Series[]>([])
+
+const fetchSeries = async () => {
+  const res = await fetch('/api/series')
+  series.value = await res.json()
+}
+
+onMounted(() => {
+  fetchSeries()
+})
 
 watch(() => props.post, (newPost) => {
   formData.value = { ...newPost }

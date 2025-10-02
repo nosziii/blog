@@ -1,14 +1,23 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
-import type { Post } from '../data/posts'
+import type { Post, Series } from '../data/posts'
 
 const route = useRoute()
 const post = ref<Post | null>(null)
+const series = ref<Series | null>(null)
 
 const fetchPost = async () => {
   const res = await fetch(`/api/posts/${route.params.slug}`)
   post.value = await res.json()
+  if (post.value?.series_slug) {
+    fetchSeries(post.value.series_slug)
+  }
+}
+
+const fetchSeries = async (seriesSlug: string) => {
+  const res = await fetch(`/api/series/${encodeURIComponent(seriesSlug)}`)
+  series.value = await res.json()
 }
 
 onMounted(() => {
@@ -45,6 +54,17 @@ const formatDate = (date: string) => {
       </RouterLink>
 
       <div class="bg-codewars-dark border border-codewars-gray-border rounded-lg p-8 md:p-12">
+        <div v-if="series" class="mb-8">
+          <h3 class="text-2xl font-bold text-white mb-4">Part of the series: <RouterLink :to="`/series/${series.slug}`" class="text-codewars-red hover:underline">{{ series.title }}</RouterLink></h3>
+          <ul>
+            <li v-for="(p, index) in series.posts" :key="p.id" :class="{'font-bold': p.id === post.id}">
+              <RouterLink :to="`/post/${p.slug}`" class="hover:text-codewars-red transition-colors">
+                {{ index + 1 }}. {{ p.title }}
+              </RouterLink>
+            </li>
+          </ul>
+        </div>
+
         <div class="flex flex-wrap items-center gap-3 mb-6">
           <span class="px-3 py-1 text-sm font-semibold bg-codewars-blue text-white rounded capitalize">
             {{ post.category }}

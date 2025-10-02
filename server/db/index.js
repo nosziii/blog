@@ -19,6 +19,14 @@ export const initDb = async () => {
     `);
 
     await pool.query(`
+      CREATE TABLE IF NOT EXISTS series (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        slug VARCHAR(255) UNIQUE NOT NULL
+      );
+    `);
+
+    await pool.query(`
       CREATE TABLE IF NOT EXISTS posts (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
@@ -31,7 +39,9 @@ export const initDb = async () => {
         read_time INTEGER NOT NULL,
         published BOOLEAN NOT NULL DEFAULT false,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        series_id INTEGER REFERENCES series(id) ON DELETE SET NULL,
+        order_in_series INTEGER
       );
     `);
 

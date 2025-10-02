@@ -11,7 +11,19 @@ export interface Post {
   published: boolean
   created_at: string
   updated_at: string
+  series_id?: number
+  order_in_series?: number
+  series_title?: string
+  series_slug?: string
 }
+
+export interface Series {
+  id: string
+  title: string
+  slug: string
+  posts?: Post[]
+}
+
 
 export const posts: Post[] = [
   {

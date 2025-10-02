@@ -20,6 +20,9 @@ import { RouterLink } from 'vue-router'
           <RouterLink to="/categories" class="text-gray-300 hover:text-white transition-colors">
             Categories
           </RouterLink>
+          <RouterLink to="/series" class="text-gray-300 hover:text-white transition-colors">
+            Series
+          </RouterLink>
           <RouterLink to="/admin" class="text-gray-300 hover:text-white transition-colors">
             Admin
           </RouterLink>
