@@ -1,0 +1,37 @@
+{
+  "name": "vite-vue-typescript-starter",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview",
+    "server": "node server/index.js",
+    "start": "npm run build && npm run server"
+  },
+  "dependencies": {
+    "@tiptap/extension-code-block-lowlight": "^3.6.2",
+    "@tiptap/starter-kit": "^3.6.2",
+    "@tiptap/vue-3": "^3.6.2",
+    "bcrypt": "^6.0.0",
+    "express": "^4.18.2",
+    "express-session": "^1.18.0",
+    "lowlight": "^3.3.0",
+    "pg": "^8.16.3",
+    "vue": "^3.4.38",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.14",
+    "@types/bcrypt": "^6.0.0",
+    "@types/pg": "^8.15.5",
+    "@vitejs/plugin-vue": "^5.1.3",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.14",
+    "typescript": "^5.5.3",
+    "vite": "^5.4.2",
+    "vue-tsc": "^2.1.4"
+  }
+}

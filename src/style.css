@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+@theme {
+  --color-codewars-dark: #1c1c1c;
+  --color-codewars-darker: #141414;
+  --color-codewars-red: #b1361e;
+  --color-codewars-blue: #2e5c8a;
+  --color-codewars-yellow: #ecb613;
+  --color-codewars-gray: #4a4a4a;
+  --color-codewars-gray-light: #6d6d6d;
+  --color-codewars-gray-border: #2d2d2d;
+}
