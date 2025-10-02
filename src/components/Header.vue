@@ -8,9 +8,9 @@ import { RouterLink } from 'vue-router'
       <div class="flex items-center justify-between">
         <RouterLink to="/" class="flex items-center space-x-2">
           <div class="w-10 h-10 bg-codewars-red rounded flex items-center justify-center font-bold text-white">
-            CW
+            IF
           </div>
-          <span class="text-xl font-bold text-white">CodeWars Blog</span>
+          <span class="text-xl font-bold text-white">InFosss Blog</span>
         </RouterLink>
 
         <nav class="flex items-center space-x-6">
