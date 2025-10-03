@@ -204,7 +204,7 @@ onMounted(() => {
 })
 
 watch(() => props.post, (newPost) => {
-  formData.value = { ...newPost }
+  formData.value = { ...newPost, published: newPost?.published || false }
   if (newPost && newPost.tags) {
     formData.value.tags = newPost.tags.join(', ')
   }

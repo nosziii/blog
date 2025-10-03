@@ -40,11 +40,6 @@ router.get('/:slug', async (req, res) => {
 router.post('/', authMiddleware, async (req, res) => {
   const { title, slug, content, excerpt, author, category, tags, read_time, published, series_id, order_in_series } = req.body;
   try {
-    const { rows: existingPosts } = await pool.query('SELECT * FROM posts WHERE slug = $1', [slug]);
-    if (existingPosts.length > 0) {
-      return res.status(400).json({ error: 'Post with this slug already exists' });
-    }
-
     const { rows } = await pool.query(
       'INSERT INTO posts (title, slug, content, excerpt, author, category, tags, read_time, published, series_id, order_in_series) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *',
       [title, slug, content, excerpt, author, category, tags.split(','), read_time, published, series_id, order_in_series]
