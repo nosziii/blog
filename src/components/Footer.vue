@@ -4,17 +4,26 @@
       <div class="flex flex-col md:flex-row justify-between items-center">
         <div class="mb-4 md:mb-0">
           <p class="text-gray-400">
-            &copy; 2025 CodeWars Blog. Minden jog fenntartva.
+            &copy; 2025 InFosss Blog. Minden jog fenntartva.
           </p>
         </div>
         <div class="flex space-x-6">
-          <a href="#" class="text-gray-400 hover:text-codewars-red transition-colors">
+          <a
+            href="#"
+            class="text-gray-400 hover:text-codewars-red transition-colors"
+          >
             GitHub
           </a>
-          <a href="#" class="text-gray-400 hover:text-codewars-red transition-colors">
+          <a
+            href="#"
+            class="text-gray-400 hover:text-codewars-red transition-colors"
+          >
             Twitter
           </a>
-          <a href="#" class="text-gray-400 hover:text-codewars-red transition-colors">
+          <a
+            href="#"
+            class="text-gray-400 hover:text-codewars-red transition-colors"
+          >
             LinkedIn
           </a>
         </div>

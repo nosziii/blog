@@ -1,30 +1,30 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import { RouterLink } from 'vue-router'
-import type { Post } from '../data/posts'
+import { ref, onMounted, computed } from "vue";
+import { RouterLink } from "vue-router";
+import type { Post } from "../data/posts";
 
-const posts = ref<Post[]>([])
+const posts = ref<Post[]>([]);
 
 const fetchPosts = async () => {
-  const res = await fetch('/api/posts')
-  posts.value = await res.json()
-}
+  const res = await fetch("/api/posts");
+  posts.value = await res.json();
+};
 
 onMounted(() => {
-  fetchPosts()
-})
+  fetchPosts();
+});
 
 const categories = computed<{ name: string; count: number }[]>(() => {
-  const categoryMap = new Map<string, number>()
-  posts.value.forEach(post => {
-    const count = categoryMap.get(post.category) || 0
-    categoryMap.set(post.category, count + 1)
-  })
+  const categoryMap = new Map<string, number>();
+  posts.value.forEach((post) => {
+    const count = categoryMap.get(post.category) || 0;
+    categoryMap.set(post.category, count + 1);
+  });
 
   return Array.from(categoryMap.entries())
     .map(([name, count]) => ({ name, count }))
-    .sort((a, b) => b.count - a.count)
-})
+    .sort((a, b) => b.count - a.count);
+});
 </script>
 
 <template>
@@ -48,12 +48,12 @@ const categories = computed<{ name: string; count: number }[]>(() => {
           to="/"
           class="bg-codewars-dark border border-codewars-gray-border rounded-lg p-8 hover:border-codewars-red transition-colors group"
         >
-          <h2 class="text-2xl font-bold text-white mb-2 capitalize group-hover:text-codewars-red transition-colors">
+          <h2
+            class="text-2xl font-bold text-white mb-2 capitalize group-hover:text-codewars-red transition-colors"
+          >
             {{ category.name }}
           </h2>
-          <p class="text-codewars-gray-light">
-            {{ category.count }} cikk
-          </p>
+          <p class="text-codewars-gray-light">{{ category.count }} cikk</p>
         </RouterLink>
       </div>
     </div>

@@ -1,31 +1,31 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import PostCard from '../components/PostCard.vue'
-import type { Post } from '../data/posts'
+import { ref, onMounted, computed } from "vue";
+import PostCard from "../components/PostCard.vue";
+import type { Post } from "../data/posts";
 
-const posts = ref<Post[]>([])
-const selectedCategory = ref<string>('all')
+const posts = ref<Post[]>([]);
+const selectedCategory = ref<string>("all");
 
 onMounted(async () => {
-  const res = await fetch('/api/posts')
-  posts.value = await res.json()
-})
+  const res = await fetch("/api/posts");
+  posts.value = await res.json();
+});
 
 const filteredPosts = computed(() => {
-  if (selectedCategory.value === 'all') {
-    return posts.value
+  if (selectedCategory.value === "all") {
+    return posts.value;
   }
-  return posts.value.filter(post => post.category === selectedCategory.value)
-})
+  return posts.value.filter((post) => post.category === selectedCategory.value);
+});
 
 const categories = computed(() => {
-  const uniqueCategories = [...new Set(posts.value.map(p => p.category))]
-  return uniqueCategories
-})
+  const uniqueCategories = [...new Set(posts.value.map((p) => p.category))];
+  return uniqueCategories;
+});
 
 const filterByCategory = (category: string) => {
-  selectedCategory.value = category
-}
+  selectedCategory.value = category;
+};
 </script>
 
 <template>
@@ -50,7 +50,7 @@ const filterByCategory = (category: string) => {
               'px-4 py-2 rounded font-semibold transition-colors',
               selectedCategory === 'all'
                 ? 'bg-codewars-red text-white'
-                : 'bg-codewars-gray text-gray-300 hover:bg-codewars-gray-light'
+                : 'bg-codewars-gray text-gray-300 hover:bg-codewars-gray-light',
             ]"
           >
             Összes
@@ -63,7 +63,7 @@ const filterByCategory = (category: string) => {
               'px-4 py-2 rounded font-semibold transition-colors capitalize',
               selectedCategory === category
                 ? 'bg-codewars-red text-white'
-                : 'bg-codewars-gray text-gray-300 hover:bg-codewars-gray-light'
+                : 'bg-codewars-gray text-gray-300 hover:bg-codewars-gray-light',
             ]"
           >
             {{ category }}
@@ -72,7 +72,9 @@ const filterByCategory = (category: string) => {
       </div>
 
       <div v-if="filteredPosts.length === 0" class="text-center py-20">
-        <p class="text-xl text-gray-400">Még nincsenek cikkek ebben a kategóriában.</p>
+        <p class="text-xl text-gray-400">
+          Még nincsenek cikkek ebben a kategóriában.
+        </p>
       </div>
 
       <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

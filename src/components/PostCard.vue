@@ -1,25 +1,29 @@
 <script setup lang="ts">
-import type { Post } from '../data/posts'
-import { RouterLink } from 'vue-router'
+import type { Post } from "../data/posts";
+import { RouterLink } from "vue-router";
 
 defineProps<{
-  post: Post
-}>()
+  post: Post;
+}>();
 
 const formatDate = (date: string) => {
-  return new Date(date).toLocaleDateString('hu-HU', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  })
-}
+  return new Date(date).toLocaleDateString("hu-HU", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
 </script>
 
 <template>
-  <article class="bg-codewars-dark border border-codewars-gray-border rounded-lg overflow-hidden hover:border-codewars-red transition-colors">
+  <article
+    class="bg-codewars-dark border border-codewars-gray-border rounded-lg overflow-hidden hover:border-codewars-red transition-colors"
+  >
     <RouterLink :to="`/post/${post.slug}`" class="block p-6">
       <div class="flex items-center gap-3 mb-3">
-        <span class="px-3 py-1 text-xs font-semibold bg-codewars-blue text-white rounded">
+        <span
+          class="px-3 py-1 text-xs font-semibold bg-codewars-blue text-white rounded"
+        >
           {{ post.category }}
         </span>
         <span class="text-codewars-gray-light text-sm">
@@ -27,7 +31,9 @@ const formatDate = (date: string) => {
         </span>
       </div>
 
-      <h2 class="text-2xl font-bold text-white mb-3 hover:text-codewars-red transition-colors">
+      <h2
+        class="text-2xl font-bold text-white mb-3 hover:text-codewars-red transition-colors"
+      >
         {{ post.title }}
       </h2>
 
@@ -37,9 +43,13 @@ const formatDate = (date: string) => {
 
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <span class="text-sm text-codewars-gray-light">{{ post.author }}</span>
+          <span class="text-sm text-codewars-gray-light">{{
+            post.author
+          }}</span>
           <span class="text-codewars-gray-light">•</span>
-          <span class="text-sm text-codewars-gray-light">{{ formatDate(post.created_at) }}</span>
+          <span class="text-sm text-codewars-gray-light">{{
+            formatDate(post.created_at)
+          }}</span>
         </div>
 
         <div class="flex gap-2">

@@ -1,36 +1,36 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRoute, RouterLink } from 'vue-router'
-import type { Post, Series } from '../data/posts'
+import { ref, onMounted } from "vue";
+import { useRoute, RouterLink } from "vue-router";
+import type { Post, Series } from "../data/posts";
 
-const route = useRoute()
-const post = ref<Post | null>(null)
-const series = ref<Series | null>(null)
+const route = useRoute();
+const post = ref<Post | null>(null);
+const series = ref<Series | null>(null);
 
 const fetchPost = async () => {
-  const res = await fetch(`/api/posts/${route.params.slug}`)
-  post.value = await res.json()
+  const res = await fetch(`/api/posts/${route.params.slug}`);
+  post.value = await res.json();
   if (post.value?.series_slug) {
-    fetchSeries(post.value.series_slug)
+    fetchSeries(post.value.series_slug);
   }
-}
+};
 
 const fetchSeries = async (seriesSlug: string) => {
-  const res = await fetch(`/api/series/${encodeURIComponent(seriesSlug)}`)
-  series.value = await res.json()
-}
+  const res = await fetch(`/api/series/${encodeURIComponent(seriesSlug)}`);
+  series.value = await res.json();
+};
 
 onMounted(() => {
-  fetchPost()
-})
+  fetchPost();
+});
 
 const formatDate = (date: string) => {
-  return new Date(date).toLocaleDateString('hu-HU', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  })
-}
+  return new Date(date).toLocaleDateString("hu-HU", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
 </script>
 
 <template>
@@ -47,18 +47,44 @@ const formatDate = (date: string) => {
         to="/"
         class="inline-flex items-center text-codewars-red hover:underline mb-8"
       >
-        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        <svg
+          class="w-5 h-5 mr-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M10 19l-7-7m0 0l7-7m-7 7h18"
+          />
         </svg>
         Vissza a cikkekhez
       </RouterLink>
 
-      <div class="bg-codewars-dark border border-codewars-gray-border rounded-lg p-8 md:p-12">
+      <div
+        class="bg-codewars-dark border border-codewars-gray-border rounded-lg p-8 md:p-12"
+      >
         <div v-if="series" class="mb-8">
-          <h3 class="text-2xl font-bold text-white mb-4">Part of the series: <RouterLink :to="`/series/${series.slug}`" class="text-codewars-red hover:underline">{{ series.title }}</RouterLink></h3>
+          <h3 class="text-2xl font-bold text-white mb-4">
+            Part of the series:
+            <RouterLink
+              :to="`/series/${series.slug}`"
+              class="text-codewars-red hover:underline"
+              >{{ series.title }}</RouterLink
+            >
+          </h3>
           <ul>
-            <li v-for="(p, index) in series.posts" :key="p.id" :class="{'font-bold': p.id === post.id}">
-              <RouterLink :to="`/post/${p.slug}`" class="hover:text-codewars-red transition-colors">
+            <li
+              v-for="(p, index) in series.posts"
+              :key="p.id"
+              :class="{ 'font-bold': p.id === post.id }"
+            >
+              <RouterLink
+                :to="`/post/${p.slug}`"
+                class="hover:text-codewars-red transition-colors"
+              >
                 {{ index + 1 }}. {{ p.title }}
               </RouterLink>
             </li>
@@ -66,7 +92,9 @@ const formatDate = (date: string) => {
         </div>
 
         <div class="flex flex-wrap items-center gap-3 mb-6">
-          <span class="px-3 py-1 text-sm font-semibold bg-codewars-blue text-white rounded capitalize">
+          <span
+            class="px-3 py-1 text-sm font-semibold bg-codewars-blue text-white rounded capitalize"
+          >
             {{ post.category }}
           </span>
           <span class="text-codewars-gray-light">
@@ -78,17 +106,26 @@ const formatDate = (date: string) => {
           {{ post.title }}
         </h1>
 
-        <div class="flex items-center gap-4 mb-8 pb-8 border-b border-codewars-gray-border">
+        <div
+          class="flex items-center gap-4 mb-8 pb-8 border-b border-codewars-gray-border"
+        >
           <span class="text-gray-300 font-semibold">{{ post.author }}</span>
           <span class="text-codewars-gray-light">•</span>
-          <span class="text-codewars-gray-light">{{ formatDate(post.created_at) }}</span>
+          <span class="text-codewars-gray-light">{{
+            formatDate(post.created_at)
+          }}</span>
         </div>
 
         <div class="prose prose-invert prose-lg max-w-none">
-          <div v-html="post.content" class="text-gray-300 leading-relaxed whitespace-pre-wrap"></div>
+          <div
+            v-html="post.content"
+            class="text-gray-300 leading-relaxed whitespace-pre-wrap"
+          ></div>
         </div>
 
-        <div class="flex flex-wrap gap-2 mt-12 pt-8 border-t border-codewars-gray-border">
+        <div
+          class="flex flex-wrap gap-2 mt-12 pt-8 border-t border-codewars-gray-border"
+        >
           <span
             v-for="tag in post.tags"
             :key="tag"
@@ -129,7 +166,7 @@ const formatDate = (date: string) => {
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
   color: #d5d1c3;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
 }
 
 .prose :deep(pre) {

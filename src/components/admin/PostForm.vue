@@ -1,13 +1,16 @@
 <template>
   <div class="bg-white rounded-lg shadow p-6">
     <h2 class="text-2xl font-bold text-gray-900 mb-6">
-      {{ isEditing ? 'Edit Post' : 'Create New Post' }}
+      {{ isEditing ? "Edit Post" : "Create New Post" }}
     </h2>
 
     <form @submit.prevent="handleSubmit" class="space-y-6">
       <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
         <div class="sm:col-span-2">
-          <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            for="title"
+            class="block text-sm font-medium text-gray-700 mb-2"
+          >
             Title
           </label>
           <input
@@ -21,7 +24,10 @@
         </div>
 
         <div class="sm:col-span-2">
-          <label for="slug" class="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            for="slug"
+            class="block text-sm font-medium text-gray-700 mb-2"
+          >
             Slug
           </label>
           <input
@@ -35,7 +41,10 @@
         </div>
 
         <div>
-          <label for="author" class="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            for="author"
+            class="block text-sm font-medium text-gray-700 mb-2"
+          >
             Author
           </label>
           <input
@@ -49,7 +58,10 @@
         </div>
 
         <div>
-          <label for="category" class="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            for="category"
+            class="block text-sm font-medium text-gray-700 mb-2"
+          >
             Category
           </label>
           <select
@@ -66,7 +78,10 @@
         </div>
 
         <div>
-          <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            for="tags"
+            class="block text-sm font-medium text-gray-700 mb-2"
+          >
             Tags (comma separated)
           </label>
           <input
@@ -79,7 +94,10 @@
         </div>
 
         <div>
-          <label for="read_time" class="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            for="read_time"
+            class="block text-sm font-medium text-gray-700 mb-2"
+          >
             Read Time (minutes)
           </label>
           <input
@@ -93,7 +111,10 @@
         </div>
 
         <div>
-          <label for="series" class="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            for="series"
+            class="block text-sm font-medium text-gray-700 mb-2"
+          >
             Series
           </label>
           <select
@@ -109,7 +130,10 @@
         </div>
 
         <div>
-          <label for="order_in_series" class="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            for="order_in_series"
+            class="block text-sm font-medium text-gray-700 mb-2"
+          >
             Order in series
           </label>
           <input
@@ -122,7 +146,10 @@
         </div>
 
         <div class="sm:col-span-2">
-          <label for="excerpt" class="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            for="excerpt"
+            class="block text-sm font-medium text-gray-700 mb-2"
+          >
             Excerpt
           </label>
           <textarea
@@ -136,7 +163,10 @@
         </div>
 
         <div class="sm:col-span-2">
-          <label for="content" class="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            for="content"
+            class="block text-sm font-medium text-gray-700 mb-2"
+          >
             Content
           </label>
           <Editor v-model="formData.content" />
@@ -168,7 +198,7 @@
           type="submit"
           class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
         >
-          {{ isEditing ? 'Update Post' : 'Create Post' }}
+          {{ isEditing ? "Update Post" : "Create Post" }}
         </button>
       </div>
     </form>
@@ -176,41 +206,51 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
-import Editor from '../Editor.vue'
-import type { Post, Series } from '../../data/posts'
+import { ref, watch, onMounted } from "vue";
+import Editor from "../Editor.vue";
+import type { Post, Series } from "../../data/posts";
 
 const props = defineProps<{
-  post: Post | null
-  isEditing: boolean
-}>()
+  post: Post | null;
+  isEditing: boolean;
+}>();
 
 const emit = defineEmits<{
-  (e: 'submit', post: any): void
-  (e: 'cancel'): void
-}>()
+  (e: "submit", post: any): void;
+  (e: "cancel"): void;
+}>();
 
-const formData = ref<any>({})
-const categories = ['announcement', 'tutorials', 'programming', 'design', 'technology']
-const series = ref<Series[]>([])
+const formData = ref<any>({});
+const categories = [
+  "announcement",
+  "tutorials",
+  "programming",
+  "design",
+  "technology",
+];
+const series = ref<Series[]>([]);
 
 const fetchSeries = async () => {
-  const res = await fetch('/api/series')
-  series.value = await res.json()
-}
+  const res = await fetch("/api/series");
+  series.value = await res.json();
+};
 
 onMounted(() => {
-  fetchSeries()
-})
+  fetchSeries();
+});
 
-watch(() => props.post, (newPost) => {
-  formData.value = { ...newPost, published: newPost?.published || false }
-  if (newPost && newPost.tags) {
-    formData.value.tags = newPost.tags.join(', ')
-  }
-}, { immediate: true })
+watch(
+  () => props.post,
+  (newPost) => {
+    formData.value = { ...newPost, published: newPost?.published || false };
+    if (newPost && newPost.tags) {
+      formData.value.tags = newPost.tags.join(", ");
+    }
+  },
+  { immediate: true }
+);
 
 const handleSubmit = () => {
-  emit('submit', formData.value)
-}
+  emit("submit", formData.value);
+};
 </script>

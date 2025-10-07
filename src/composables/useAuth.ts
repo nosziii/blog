@@ -1,5 +1,5 @@
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 export function useAuth() {
   const router = useRouter();
@@ -8,7 +8,7 @@ export function useAuth() {
 
   const checkAuth = async () => {
     try {
-      const res = await fetch('/api/check-auth');
+      const res = await fetch("/api/check-auth");
       const data = await res.json();
       isAuthenticated.value = data.authenticated;
       if (!isAuthenticated.value) {
@@ -16,7 +16,7 @@ export function useAuth() {
       }
       return data.authenticated;
     } catch (error) {
-      console.error('Auth check failed:', error);
+      console.error("Auth check failed:", error);
       isAuthenticated.value = false;
       showLoginModal.value = true;
       return false;
@@ -25,9 +25,9 @@ export function useAuth() {
 
   const handleLogin = async (credentials: any) => {
     try {
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),
       });
       const data = await res.json();
@@ -36,20 +36,20 @@ export function useAuth() {
         showLoginModal.value = false;
         return true; // Success
       } else {
-        alert('Invalid credentials');
+        alert("Invalid credentials");
         return false; // Failure
       }
     } catch (error) {
-      console.error('Login failed:', error);
-      alert('Login request failed.');
+      console.error("Login failed:", error);
+      alert("Login request failed.");
       return false;
     }
   };
 
   const handleLogout = async () => {
-    await fetch('/api/logout', { method: 'POST' });
+    await fetch("/api/logout", { method: "POST" });
     isAuthenticated.value = false;
-    router.push('/');
+    router.push("/");
   };
 
   return {

@@ -1,13 +1,16 @@
 <template>
   <div class="bg-white rounded-lg shadow p-6">
     <h2 class="text-2xl font-bold text-gray-900 mb-6">
-      {{ isEditing ? 'Edit Series' : 'Create New Series' }}
+      {{ isEditing ? "Edit Series" : "Create New Series" }}
     </h2>
 
     <form @submit.prevent="handleSubmit" class="space-y-6">
       <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
         <div class="sm:col-span-2">
-          <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            for="title"
+            class="block text-sm font-medium text-gray-700 mb-2"
+          >
             Title
           </label>
           <input
@@ -21,7 +24,10 @@
         </div>
 
         <div class="sm:col-span-2">
-          <label for="slug" class="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            for="slug"
+            class="block text-sm font-medium text-gray-700 mb-2"
+          >
             Slug
           </label>
           <input
@@ -47,7 +53,7 @@
           type="submit"
           class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
         >
-          {{ isEditing ? 'Update Series' : 'Create Series' }}
+          {{ isEditing ? "Update Series" : "Create Series" }}
         </button>
       </div>
     </form>
@@ -55,26 +61,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import type { Series } from '../../data/posts'
+import { ref, watch } from "vue";
+import type { Series } from "../../data/posts";
 
 const props = defineProps<{
-  series: Series | null
-  isEditing: boolean
-}>()
+  series: Series | null;
+  isEditing: boolean;
+}>();
 
 const emit = defineEmits<{
-  (e: 'submit', series: any): void
-  (e: 'cancel'): void
-}>()
+  (e: "submit", series: any): void;
+  (e: "cancel"): void;
+}>();
 
-const formData = ref<any>({})
+const formData = ref<any>({});
 
-watch(() => props.series, (newSeries) => {
-  formData.value = { ...newSeries }
-}, { immediate: true })
+watch(
+  () => props.series,
+  (newSeries) => {
+    formData.value = { ...newSeries };
+  },
+  { immediate: true }
+);
 
 const handleSubmit = () => {
-  emit('submit', formData.value)
-}
+  emit("submit", formData.value);
+};
 </script>

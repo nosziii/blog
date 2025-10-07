@@ -1,76 +1,126 @@
 <template>
   <div v-if="editor" class="editor-container">
     <div class="toolbar">
-      <button @click="editor.chain().focus().toggleBold().run()" :disabled="!editor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }">
+      <button
+        @click="editor.chain().focus().toggleBold().run()"
+        :disabled="!editor.can().chain().focus().toggleBold().run()"
+        :class="{ 'is-active': editor.isActive('bold') }"
+      >
         Bold
       </button>
-      <button @click="editor.chain().focus().toggleItalic().run()" :disabled="!editor.can().chain().focus().toggleItalic().run()" :class="{ 'is-active': editor.isActive('italic') }">
+      <button
+        @click="editor.chain().focus().toggleItalic().run()"
+        :disabled="!editor.can().chain().focus().toggleItalic().run()"
+        :class="{ 'is-active': editor.isActive('italic') }"
+      >
         Italic
       </button>
-      <button @click="editor.chain().focus().toggleStrike().run()" :disabled="!editor.can().chain().focus().toggleStrike().run()" :class="{ 'is-active': editor.isActive('strike') }">
+      <button
+        @click="editor.chain().focus().toggleStrike().run()"
+        :disabled="!editor.can().chain().focus().toggleStrike().run()"
+        :class="{ 'is-active': editor.isActive('strike') }"
+      >
         Strike
       </button>
-      <button @click="editor.chain().focus().toggleCode().run()" :disabled="!editor.can().chain().focus().toggleCode().run()" :class="{ 'is-active': editor.isActive('code') }">
+      <button
+        @click="editor.chain().focus().toggleCode().run()"
+        :disabled="!editor.can().chain().focus().toggleCode().run()"
+        :class="{ 'is-active': editor.isActive('code') }"
+      >
         Code
       </button>
-      <button @click="setLink" :class="{ 'is-active': editor.isActive('link') }">
+      <button
+        @click="setLink"
+        :class="{ 'is-active': editor.isActive('link') }"
+      >
         Set Link
       </button>
-      <button @click="editor.chain().focus().unsetLink().run()" :disabled="!editor.isActive('link')">
+      <button
+        @click="editor.chain().focus().unsetLink().run()"
+        :disabled="!editor.isActive('link')"
+      >
         Unset Link
       </button>
-      <button @click="triggerFileInput">
-        Add Image
-      </button>
-      <button @click="editor.chain().focus().setParagraph().run()" :class="{ 'is-active': editor.isActive('paragraph') }">
+      <button @click="triggerFileInput">Add Image</button>
+      <button
+        @click="editor.chain().focus().setParagraph().run()"
+        :class="{ 'is-active': editor.isActive('paragraph') }"
+      >
         Paragraph
       </button>
-      <button @click="editor.chain().focus().toggleHeading({ level: 1 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }">
+      <button
+        @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
+        :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
+      >
         H1
       </button>
-      <button @click="editor.chain().focus().toggleHeading({ level: 2 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }">
+      <button
+        @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
+        :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
+      >
         H2
       </button>
-      <button @click="editor.chain().focus().toggleHeading({ level: 3 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }">
+      <button
+        @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
+        :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
+      >
         H3
       </button>
-      <button @click="editor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': editor.isActive('bulletList') }">
+      <button
+        @click="editor.chain().focus().toggleBulletList().run()"
+        :class="{ 'is-active': editor.isActive('bulletList') }"
+      >
         Bullet List
       </button>
-      <button @click="editor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active': editor.isActive('orderedList') }">
+      <button
+        @click="editor.chain().focus().toggleOrderedList().run()"
+        :class="{ 'is-active': editor.isActive('orderedList') }"
+      >
         Ordered List
       </button>
-      <button @click="editor.chain().focus().toggleCodeBlock().run()" :class="{ 'is-active': editor.isActive('codeBlock') }">
+      <button
+        @click="editor.chain().focus().toggleCodeBlock().run()"
+        :class="{ 'is-active': editor.isActive('codeBlock') }"
+      >
         Code Block
       </button>
-      <button @click="editor.chain().focus().toggleBlockquote().run()" :class="{ 'is-active': editor.isActive('blockquote') }">
+      <button
+        @click="editor.chain().focus().toggleBlockquote().run()"
+        :class="{ 'is-active': editor.isActive('blockquote') }"
+      >
         Blockquote
       </button>
       <button @click="editor.chain().focus().setHorizontalRule().run()">
         Horizontal Rule
       </button>
     </div>
-    <input type="file" ref="fileInput" @change="uploadImage" style="display: none" accept="image/*" />
+    <input
+      type="file"
+      ref="fileInput"
+      @change="uploadImage"
+      style="display: none"
+      accept="image/*"
+    />
     <editor-content :editor="editor" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useEditor, EditorContent } from '@tiptap/vue-3'
-import StarterKit from '@tiptap/starter-kit'
-import CodeBlock from '@tiptap/extension-code-block'
-import Link from '@tiptap/extension-link'
-import Image from '@tiptap/extension-image'
+import { ref } from "vue";
+import { useEditor, EditorContent } from "@tiptap/vue-3";
+import StarterKit from "@tiptap/starter-kit";
+import CodeBlock from "@tiptap/extension-code-block";
+import Link from "@tiptap/extension-link";
+import Image from "@tiptap/extension-image";
 
 const props = defineProps({
   modelValue: {
     type: String,
-    default: '',
+    default: "",
   },
-})
+});
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(["update:modelValue"]);
 
 const fileInput = ref<HTMLInputElement | null>(null);
 
@@ -81,7 +131,7 @@ const editor = useEditor({
       codeBlock: false,
     }),
     CodeBlock.configure({
-      languageClassPrefix: 'language-',
+      languageClassPrefix: "language-",
     }),
     Link.configure({
       openOnClick: false,
@@ -90,25 +140,30 @@ const editor = useEditor({
     Image,
   ],
   onUpdate: () => {
-    emit('update:modelValue', editor.value?.getHTML())
+    emit("update:modelValue", editor.value?.getHTML());
   },
-})
+});
 
 const setLink = () => {
-  const previousUrl = editor.value?.getAttributes('link').href
-  const url = window.prompt('URL', previousUrl)
+  const previousUrl = editor.value?.getAttributes("link").href;
+  const url = window.prompt("URL", previousUrl);
 
   if (url === null) {
-    return
+    return;
   }
 
-  if (url === '') {
-    editor.value?.chain().focus().extendMarkRange('link').unsetLink().run()
-    return
+  if (url === "") {
+    editor.value?.chain().focus().extendMarkRange("link").unsetLink().run();
+    return;
   }
 
-  editor.value?.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
-}
+  editor.value
+    ?.chain()
+    .focus()
+    .extendMarkRange("link")
+    .setLink({ href: url })
+    .run();
+};
 
 const triggerFileInput = () => {
   fileInput.value?.click();
@@ -123,16 +178,16 @@ const uploadImage = async (event: Event) => {
   }
 
   const formData = new FormData();
-  formData.append('image', file);
+  formData.append("image", file);
 
   try {
-    const response = await fetch('/api/upload', {
-      method: 'POST',
+    const response = await fetch("/api/upload", {
+      method: "POST",
       body: formData,
     });
 
     if (!response.ok) {
-      throw new Error('Image upload failed');
+      throw new Error("Image upload failed");
     }
 
     const { url } = await response.json();
@@ -141,15 +196,14 @@ const uploadImage = async (event: Event) => {
       editor.value?.chain().focus().setImage({ src: url }).run();
     }
   } catch (error) {
-    console.error('Error uploading image:', error);
-    alert('Error uploading image. Please try again.');
+    console.error("Error uploading image:", error);
+    alert("Error uploading image. Please try again.");
   } finally {
     if (target) {
-      target.value = '';
+      target.value = "";
     }
   }
 };
-
 </script>
 
 <style>
@@ -220,9 +274,15 @@ const uploadImage = async (event: Event) => {
   font-weight: bold;
 }
 
-.editor-container .ProseMirror h1 { font-size: 2em; }
-.editor-container .ProseMirror h2 { font-size: 1.5em; }
-.editor-container .ProseMirror h3 { font-size: 1.17em; }
+.editor-container .ProseMirror h1 {
+  font-size: 2em;
+}
+.editor-container .ProseMirror h2 {
+  font-size: 1.5em;
+}
+.editor-container .ProseMirror h3 {
+  font-size: 1.17em;
+}
 
 .editor-container .ProseMirror ul,
 .editor-container .ProseMirror ol {
@@ -240,13 +300,13 @@ const uploadImage = async (event: Event) => {
   background-color: #f5f5f5;
   padding: 0.2em 0.4em;
   border-radius: 3px;
-  font-family: 'JetBrainsMono', monospace;
+  font-family: "JetBrainsMono", monospace;
 }
 
 .editor-container .ProseMirror pre {
-  background: #0D0D0D;
-  color: #FFF;
-  font-family: 'JetBrainsMono', monospace;
+  background: #0d0d0d;
+  color: #fff;
+  font-family: "JetBrainsMono", monospace;
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
 }
