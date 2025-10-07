@@ -128,7 +128,7 @@ const formatDate = (date: string) => {
   background-color: #2d2d2d;
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
-  color: #ecb613;
+  color: #d5d1c3;
   font-family: 'Courier New', monospace;
 }
 

@@ -6,6 +6,7 @@ import { initDb } from './db/index.js';
 import authRoutes from './routes/auth.js';
 import postRoutes from './routes/posts.js';
 import seriesRoutes from './routes/series.js';
+import uploadRoutes from './routes/uploads.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,7 +34,9 @@ const startServer = async () => {
   app.use('/api', authRoutes);
   app.use('/api/posts', postRoutes);
   app.use('/api/series', seriesRoutes);
+  app.use('/api/upload', uploadRoutes);
 
+  app.use(express.static(path.join(__dirname, '../public'))); // Serve public files
   app.use(express.static(path.join(__dirname, '../dist')));
 
   app.get('*', (req, res) => {

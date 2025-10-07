@@ -32,7 +32,7 @@ router.get('/:slug', async (req, res) => {
     }
     const series = seriesRows[0];
 
-    const { rows: postsRows } = await pool.query('SELECT * FROM posts WHERE series_id = $1 ORDER BY order_in_series', [series.id]);
+    const { rows: postsRows } = await pool.query('SELECT * FROM posts WHERE series_id = $1 AND published = true ORDER BY order_in_series', [series.id]);
     series.posts = postsRows;
 
     res.json(series);
@@ -50,7 +50,7 @@ router.get('/id/:id', async (req, res) => {
     }
     const series = seriesRows[0];
 
-    const { rows: postsRows } = await pool.query('SELECT * FROM posts WHERE series_id = $1 ORDER BY order_in_series', [series.id]);
+    const { rows: postsRows } = await pool.query('SELECT * FROM posts WHERE series_id = $1 AND published = true ORDER BY order_in_series', [series.id]);
     series.posts = postsRows;
 
     res.json(series);

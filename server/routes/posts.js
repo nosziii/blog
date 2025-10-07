@@ -16,6 +16,16 @@ const authMiddleware = (req, res, next) => {
 
 router.get('/', async (req, res) => {
   try {
+    const { rows } = await pool.query('SELECT * FROM posts WHERE published = true ORDER BY created_at DESC');
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.get('/all', authMiddleware, async (req, res) => {
+  try {
     const { rows } = await pool.query('SELECT * FROM posts ORDER BY created_at DESC');
     res.json(rows);
   } catch (err) {

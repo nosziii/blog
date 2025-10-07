@@ -14,4 +14,4 @@ RUN npm install --omit=dev
 COPY --from=build /app/dist /app/dist
 COPY server /app/server
 EXPOSE 3000
-CMD ["npm", "run", "server"]
+CMD ["sh", "-c", "npm run db:init && npm run server"]
