@@ -34,6 +34,16 @@ router.get('/all', authMiddleware, async (req, res) => {
   }
 });
 
+router.get('/recent', async (req, res) => {
+  try {
+    const { rows } = await pool.query('SELECT title, slug, excerpt FROM posts WHERE published = true ORDER BY created_at DESC LIMIT 3');
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 router.get('/:slug', async (req, res) => {
   try {
     const { rows } = await pool.query('SELECT p.*, s.title as series_title, s.slug as series_slug FROM posts p LEFT JOIN series s ON p.series_id = s.id WHERE p.slug = $1', [req.params.slug]);
