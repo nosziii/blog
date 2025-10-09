@@ -75,11 +75,11 @@ const formatDate = (date: string) => {
               >{{ series.title }}</RouterLink
             >
           </h3>
-          <ul>
+          <ul class="list-disc list-inside space-y-2">
             <li
               v-for="(p, index) in series.posts"
               :key="p.id"
-              :class="{ 'font-bold': p.id === post.id }"
+              :class="{ 'text-white font-bold': p.id === post.id, 'text-gray-400': p.id !== post.id }"
             >
               <RouterLink
                 :to="`/post/${p.slug}`"

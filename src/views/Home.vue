@@ -40,19 +40,19 @@ const tags = ref<Tag[]>([]);
 
 const fetchRecentPosts = async () => {
   try {
-    const res = await fetch('/api/posts/recent');
+    const res = await fetch("/api/posts/recent");
     recentPosts.value = await res.json();
   } catch (error) {
-    console.error('Failed to fetch recent posts:', error);
+    console.error("Failed to fetch recent posts:", error);
   }
 };
 
 const fetchTags = async () => {
   try {
-    const res = await fetch('/api/tags');
+    const res = await fetch("/api/tags");
     tags.value = await res.json();
   } catch (error) {
-    console.error('Failed to fetch tags:', error);
+    console.error("Failed to fetch tags:", error);
   }
 };
 
@@ -79,10 +79,11 @@ onMounted(async () => {
   <div class="bg-codewars-dark border-b border-codewars-gray-border">
     <div class="container mx-auto px-4 py-12">
       <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
-        Fedezd fel a tudást
+        Információk és források csak úgy!
       </h1>
       <p class="text-xl text-gray-400 max-w-2xl">
-        Cikkek, tutorialok és tippek fejlesztőknek és programozóknak
+        Egy összeállítás a programozás világából, különös tekintettel a
+        webfejlesztésre talán!
       </p>
     </div>
   </div>
@@ -125,7 +126,10 @@ onMounted(async () => {
           </p>
         </div>
 
-        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          v-else
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
           <PostCard v-for="post in filteredPosts" :key="post.id" :post="post" />
         </div>
       </div>
@@ -136,7 +140,10 @@ onMounted(async () => {
           <h3 class="text-xl font-bold mb-4 text-white">Recent Posts</h3>
           <div v-if="recentPosts.length" class="space-y-4">
             <div v-for="post in recentPosts" :key="post.slug">
-              <router-link :to="`/post/${post.slug}`" class="font-semibold text-codewars-yellow hover:text-blue-600 transition-colors">
+              <router-link
+                :to="`/post/${post.slug}`"
+                class="font-semibold text-codewars-yellow hover:text-blue-600 transition-colors"
+              >
                 {{ post.title }}
               </router-link>
               <p class="text-sm text-gray-400">{{ post.excerpt }}</p>
@@ -151,8 +158,8 @@ onMounted(async () => {
         <section>
           <h3 class="text-xl font-bold mb-4 text-white">Tags</h3>
           <div v-if="tags.length" class="flex flex-wrap gap-2">
-            <span 
-              v-for="tag in tags" 
+            <span
+              v-for="tag in tags"
               :key="tag.tag"
               :style="{ fontSize: tagFontSize(tag.count) }"
               class="px-2 py-1 bg-codewars-gray text-gray-300 rounded-md hover:bg-blue-500 hover:text-white transition-colors cursor-pointer"
