@@ -5,6 +5,7 @@ import Categories from "../views/Categories.vue";
 import Admin from "../views/Admin.vue";
 import Series from "../views/Series.vue";
 import SeriesDetail from "../views/SeriesDetail.vue";
+import Search from "../views/Search.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,11 @@ const router = createRouter({
       path: "/series/:slug",
       name: "series-detail",
       component: SeriesDetail,
+    },
+    {
+      path: "/search",
+      name: "search",
+      component: Search,
     },
   ],
 });

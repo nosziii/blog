@@ -8,6 +8,7 @@ import postRoutes from './routes/posts.js';
 import seriesRoutes from './routes/series.js';
 import uploadRoutes from './routes/uploads.js';
 import tagRoutes from './routes/tags.js';
+import searchRoutes from './routes/search.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,9 +27,9 @@ const startServer = async () => {
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false,
+      secure: false, // Set to true if using HTTPS
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24
+      maxAge: 1000 * 60 * 60 * 24 // 1 day
     }
   }));
 
@@ -37,6 +38,7 @@ const startServer = async () => {
   app.use('/api/series', seriesRoutes);
   app.use('/api/upload', uploadRoutes);
   app.use('/api/tags', tagRoutes);
+  app.use('/api/search', searchRoutes);
 
   app.use(express.static(path.join(__dirname, '../public'))); // Serve public files
   app.use(express.static(path.join(__dirname, '../dist')));

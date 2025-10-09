@@ -1,7 +1,17 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
+import { useRouter } from "vue-router";
 import PostCard from "../components/PostCard.vue";
 import type { Post } from "../data/posts";
+
+const router = useRouter();
+const searchQuery = ref("");
+
+const handleSearch = () => {
+  if (searchQuery.value.trim()) {
+    router.push(`/search?q=${encodeURIComponent(searchQuery.value.trim())}`);
+  }
+};
 
 // From Home.vue
 const posts = ref<Post[]>([]);
@@ -77,14 +87,31 @@ onMounted(async () => {
 
 <template>
   <div class="bg-codewars-dark border-b border-codewars-gray-border">
-    <div class="container mx-auto px-4 py-12">
-      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
+    <div class="container mx-auto px-4 py-12 md:py-20">
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 text-center">
         Információk és források csak úgy!
       </h1>
-      <p class="text-xl text-gray-400 max-w-2xl">
+      <p class="text-xl text-gray-400 max-w-2xl mx-auto text-center">
         Egy összeállítás a programozás világából, különös tekintettel a
         webfejlesztésre talán!
       </p>
+
+      <div class="mt-8 max-w-xl mx-auto">
+        <form @submit.prevent="handleSearch" class="flex items-center bg-[#0f1114] rounded-full border border-neutral-700 p-1.5 pr-2.5">
+          <input
+            v-model="searchQuery"
+            type="text"
+            class="flex-grow bg-transparent text-white px-4 py-2 text-lg outline-none placeholder:text-gray-500"
+            placeholder="Search posts by name, tag..."
+          />
+          <button
+            type="submit"
+            class="ml-2 px-5 py-2 rounded-full bg-[#84ff61] text-black font-semibold hover:brightness-95 active:brightness-90 transition-all"
+          >
+            Search
+          </button>
+        </form>
+      </div>
     </div>
   </div>
 
