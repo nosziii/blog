@@ -53,7 +53,7 @@ export function usePosts() {
     activePostTab.value = "edit";
   };
 
-  const handleDeletePost = async (id: string) => {
+  const handleDeletePost = async (id: number) => {
     if (confirm("Are you sure you want to delete this post?")) {
       await fetch(`/api/posts/${id}`, { method: "DELETE" });
       fetchPosts(); // Refresh list

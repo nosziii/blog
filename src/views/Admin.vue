@@ -11,9 +11,10 @@ import PostForm from "../components/admin/PostForm.vue";
 import SeriesList from "../components/admin/SeriesList.vue";
 import SeriesForm from "../components/admin/SeriesForm.vue";
 import Statistics from "../components/admin/Statistics.vue";
+import CommentList from "../components/admin/CommentList.vue";
 
 const router = useRouter();
-const activeTab = ref<"posts" | "series" | "stats">("posts");
+const activeTab = ref<"posts" | "series" | "stats" | "comments">("posts");
 
 const {
   isAuthenticated,
@@ -139,6 +140,17 @@ onMounted(async () => {
             >
               Statistics
             </button>
+            <button
+              @click="activeTab = 'comments'"
+              :class="[
+                'px-4 py-3 text-sm font-medium transition-colors',
+                activeTab === 'comments'
+                  ? 'border-b-2 border-[#84ff61] text-[#84ff61]'
+                  : 'text-gray-400 hover:text-white',
+              ]"
+            >
+              Comments
+            </button>
           </div>
         </div>
       </div>
@@ -228,6 +240,9 @@ onMounted(async () => {
         </div>
         <div v-if="activeTab === 'stats'">
           <Statistics :posts="posts" />
+        </div>
+        <div v-if="activeTab === 'comments'">
+          <CommentList />
         </div>
       </div>
     </div>

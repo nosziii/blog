@@ -1,17 +1,48 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRoute, RouterLink } from "vue-router";
 import type { Post, Series } from "../data/posts";
+
+interface Comment {
+  id: number;
+  author: string;
+  content: string;
+  created_at: string;
+}
 
 const route = useRoute();
 const post = ref<Post | null>(null);
 const series = ref<Series | null>(null);
+const comments = ref<Comment[]>([]);
 
-const fetchPost = async () => {
-  const res = await fetch(`/api/posts/${route.params.slug}`);
-  post.value = await res.json();
-  if (post.value?.series_slug) {
-    fetchSeries(post.value.series_slug);
+const newComment = ref({
+  author: "",
+  content: "",
+  captcha: "",
+});
+const captcha = ref({ num1: 0, num2: 0, answer: 0 });
+const submissionStatus = ref("");
+
+const generateCaptcha = () => {
+  captcha.value.num1 = Math.floor(Math.random() * 10) + 1;
+  captcha.value.num2 = Math.floor(Math.random() * 10) + 1;
+  captcha.value.answer = captcha.value.num1 + captcha.value.num2;
+};
+
+const fetchPost = async (slug: string) => {
+  try {
+    const res = await fetch(`/api/posts/${slug}`);
+    if (!res.ok) throw new Error("Post not found");
+    post.value = await res.json();
+    if (post.value?.id) {
+      fetchComments(post.value.id);
+    }
+    if (post.value?.series_slug) {
+      fetchSeries(post.value.series_slug);
+    }
+  } catch (error) {
+    console.error("Error fetching post:", error);
+    post.value = null;
   }
 };
 
@@ -20,8 +51,56 @@ const fetchSeries = async (seriesSlug: string) => {
   series.value = await res.json();
 };
 
+const fetchComments = async (postId: number) => {
+  try {
+    const res = await fetch(`/api/comments/${postId}`);
+    comments.value = await res.json();
+  } catch (error) {
+    console.error("Error fetching comments:", error);
+  }
+};
+
+const handleCommentSubmit = async () => {
+  if (parseInt(newComment.value.captcha) !== captcha.value.answer) {
+    submissionStatus.value = "Incorrect captcha. Please try again.";
+    generateCaptcha();
+    return;
+  }
+
+  if (!post.value) return;
+
+  try {
+    const response = await fetch(`/api/comments/${post.value.id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        author: newComment.value.author,
+        content: newComment.value.content,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      submissionStatus.value = result.message;
+      newComment.value = { author: "", content: "", captcha: "" };
+    } else {
+      throw new Error(result.error || "Failed to submit comment.");
+    }
+  } catch (error: any) { submissionStatus.value = error.message;
+  } finally {
+    generateCaptcha();
+  }
+};
+
+watch(() => route.params.slug, (newSlug) => {
+  if (newSlug) {
+    fetchPost(newSlug as string);
+  }
+}, { immediate: true });
+
 onMounted(() => {
-  fetchPost();
+  generateCaptcha();
 });
 
 const formatDate = (date: string) => {
@@ -29,6 +108,8 @@ const formatDate = (date: string) => {
     year: "numeric",
     month: "long",
     day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 };
 </script>
@@ -133,6 +214,48 @@ const formatDate = (date: string) => {
           >
             #{{ tag }}
           </span>
+        </div>
+      </div>
+
+      <!-- Comments Section -->
+      <div class="mt-12">
+        <h2 class="text-3xl font-bold text-white mb-6">Comments</h2>
+
+        <!-- Comment Form -->
+        <div class="bg-codewars-dark border border-codewars-gray-border rounded-lg p-6 mb-8">
+          <h3 class="text-xl font-semibold text-white mb-4">Leave a Comment</h3>
+          <form @submit.prevent="handleCommentSubmit" class="space-y-4">
+            <div>
+              <label for="author" class="block text-sm font-medium text-gray-300 mb-2">Name</label>
+              <input type="text" id="author" v-model="newComment.author" required class="w-full rounded-md border border-neutral-700 bg-[#0f1114] px-3 py-2 text-sm text-gray-100 outline-none focus:border-[#84ff61] focus:ring-2 focus:ring-[#84ff61]/30 placeholder:text-gray-500">
+            </div>
+            <div>
+              <label for="comment" class="block text-sm font-medium text-gray-300 mb-2">Comment</label>
+              <textarea id="comment" v-model="newComment.content" required rows="4" class="w-full rounded-md border border-neutral-700 bg-[#0f1114] px-3 py-2 text-sm text-gray-100 outline-none focus:border-[#84ff61] focus:ring-2 focus:ring-[#84ff61]/30 placeholder:text-gray-500"></textarea>
+            </div>
+            <div class="flex items-center gap-4">
+              <label for="captcha" class="block text-sm font-medium text-gray-300">What is {{ captcha.num1 }} + {{ captcha.num2 }}?</label>
+              <input type="text" id="captcha" v-model="newComment.captcha" required class="w-24 rounded-md border border-neutral-700 bg-[#0f1114] px-3 py-2 text-sm text-gray-100 outline-none focus:border-[#84ff61] focus:ring-2 focus:ring-[#84ff61]/30 placeholder:text-gray-500">
+            </div>
+            <div class="flex items-center justify-between">
+              <button type="submit" class="px-6 py-2 rounded-md bg-[#84ff61] text-sm font-semibold text-black shadow-lg hover:brightness-95 active:brightness-90 transition-all">Submit Comment</button>
+              <p v-if="submissionStatus" class="text-sm text-codewars-red">{{ submissionStatus }}</p>
+            </div>
+          </form>
+        </div>
+
+        <!-- Comments List -->
+        <div class="space-y-6">
+          <div v-if="comments.length === 0">
+            <p class="text-gray-400">No comments yet. Be the first to comment!</p>
+          </div>
+          <div v-else v-for="comment in comments" :key="comment.id" class="bg-codewars-dark border border-codewars-gray-border rounded-lg p-5">
+            <div class="flex items-center justify-between mb-2">
+              <p class="font-semibold text-white">{{ comment.author }}</p>
+              <p class="text-xs text-gray-400">{{ formatDate(comment.created_at) }}</p>
+            </div>
+            <p class="text-gray-300">{{ comment.content }}</p>
+          </div>
         </div>
       </div>
     </article>

@@ -25,7 +25,7 @@ export function useSeries() {
     activeSeriesTab.value = "edit";
   };
 
-  const handleDeleteSeries = async (id: string) => {
+  const handleDeleteSeries = async (id: number) => {
     if (confirm("Are you sure you want to delete this series?")) {
       await fetch(`/api/series/${id}`, { method: "DELETE" });
       fetchSeries(); // Refresh list
