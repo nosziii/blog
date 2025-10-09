@@ -10,6 +10,7 @@ import uploadRoutes from './routes/uploads.js';
 import tagRoutes from './routes/tags.js';
 import searchRoutes from './routes/search.js';
 import commentRoutes from './routes/comments.js';
+import categoryRoutes from './routes/categories.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -41,6 +42,7 @@ const startServer = async () => {
   app.use('/api/tags', tagRoutes);
   app.use('/api/search', searchRoutes);
   app.use('/api/comments', commentRoutes);
+  app.use('/api/categories', categoryRoutes);
 
   app.use(express.static(path.join(__dirname, '../public'))); // Serve public files
   app.use(express.static(path.join(__dirname, '../dist')));

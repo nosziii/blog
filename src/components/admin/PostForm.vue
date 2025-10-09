@@ -1,3 +1,74 @@
+<script setup lang="ts">
+import { ref, watch, onMounted } from "vue";
+import Editor from "../Editor.vue";
+import type { Post, Series } from "../../data/posts";
+
+interface Category {
+  id: number;
+  name: string;
+}
+
+const props = defineProps<{
+  post: Post | null;
+  isEditing: boolean;
+}>();
+
+const emit = defineEmits<{
+  (e: "submit", post: any): void;
+  (e: "cancel"): void;
+}>();
+
+const formData = ref<any>({});
+const categories = ref<Category[]>([]);
+const series = ref<Series[]>([]);
+
+const fetchSeries = async () => {
+  const res = await fetch("/api/series");
+  series.value = await res.json();
+};
+
+const fetchCategories = async () => {
+  const res = await fetch("/api/categories");
+  categories.value = await res.json();
+};
+
+onMounted(() => {
+  fetchSeries();
+  fetchCategories();
+});
+
+watch(
+  () => props.post,
+  (newPost) => {
+    if (newPost) {
+      formData.value = { ...newPost, published: newPost.published || false };
+      if (newPost.tags) {
+        formData.value.tags = newPost.tags.join(", ");
+      }
+    } else {
+      formData.value = {
+        title: "",
+        slug: "",
+        content: "",
+        excerpt: "",
+        author: "",
+        category: "",
+        tags: "",
+        read_time: 1,
+        published: false,
+        series_id: null,
+        order_in_series: null,
+      };
+    }
+  },
+  { immediate: true }
+);
+
+const handleSubmit = () => {
+  emit("submit", formData.value);
+};
+</script>
+
 <template>
   <div class="bg-[#121417] rounded-xl shadow-lg p-6 md:p-8 border border-neutral-800">
     <h2 class="text-2xl font-bold text-white mb-8">
@@ -71,8 +142,8 @@
             class="w-full rounded-md border border-neutral-700 bg-[#0f1114] px-3 py-2 text-sm outline-none focus:border-[#84ff61] focus:ring-2 focus:ring-[#84ff61]/30 placeholder:text-gray-500"
           >
             <option value="">Select category</option>
-            <option v-for="cat in categories" :key="cat" :value="cat">
-              {{ cat }}
+            <option v-for="cat in categories" :key="cat.id" :value="cat.name">
+              {{ cat.name }}
             </option>
           </select>
         </div>
@@ -204,69 +275,3 @@
     </form>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref, watch, onMounted } from "vue";
-import Editor from "../Editor.vue";
-import type { Post, Series } from "../../data/posts";
-
-const props = defineProps<{
-  post: Post | null;
-  isEditing: boolean;
-}>();
-
-const emit = defineEmits<{
-  (e: "submit", post: any): void;
-  (e: "cancel"): void;
-}>();
-
-const formData = ref<any>({});
-const categories = [
-  "announcement",
-  "tutorials",
-  "programming",
-  "design",
-  "technology",
-];
-const series = ref<Series[]>([]);
-
-const fetchSeries = async () => {
-  const res = await fetch("/api/series");
-  series.value = await res.json();
-};
-
-onMounted(() => {
-  fetchSeries();
-});
-
-watch(
-  () => props.post,
-  (newPost) => {
-    if (newPost) {
-      formData.value = { ...newPost, published: newPost.published || false };
-      if (newPost.tags) {
-        formData.value.tags = newPost.tags.join(", ");
-      }
-    } else {
-      formData.value = {
-        title: "",
-        slug: "",
-        content: "",
-        excerpt: "",
-        author: "",
-        category: "",
-        tags: "",
-        read_time: 1,
-        published: false,
-        series_id: null,
-        order_in_series: null,
-      };
-    }
-  },
-  { immediate: true }
-);
-
-const handleSubmit = () => {
-  emit("submit", formData.value);
-};
-</script>

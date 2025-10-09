@@ -56,6 +56,19 @@ export const initDb = async () => {
       );
     `);
 
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS categories (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) UNIQUE NOT NULL
+      );
+    `);
+
+    // Insert default categories if they don't exist
+    const defaultCategories = ['announcement', 'tutorials', 'programming', 'design', 'technology'];
+    for (const category of defaultCategories) {
+      await pool.query('INSERT INTO categories (name) VALUES ($1) ON CONFLICT (name) DO NOTHING', [category]);
+    }
+
     const hash = await bcrypt.hash('JDnn26hg', saltRounds);
     await pool.query(
       'INSERT INTO users (username, password) VALUES ($1, $2) ON CONFLICT (username) DO NOTHING',
