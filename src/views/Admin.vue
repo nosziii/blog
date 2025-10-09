@@ -11,6 +11,7 @@ import PostForm from "../components/admin/PostForm.vue";
 import SeriesList from "../components/admin/SeriesList.vue";
 import SeriesForm from "../components/admin/SeriesForm.vue";
 import Statistics from "../components/admin/Statistics.vue";
+
 const router = useRouter();
 const activeTab = ref<"posts" | "series" | "stats">("posts");
 
@@ -76,53 +77,65 @@ onMounted(async () => {
       @close="router.push('/')"
       @login="handleLogin"
     />
-    <div v-if="isAuthenticated" class="min-h-screen bg-gray-50">
-      <div class="bg-white border-b border-gray-200">
+    <div v-if="isAuthenticated" class="min-h-screen bg-[#0c0f12] text-gray-100">
+      <div class="bg-[#121417] border-b border-neutral-800 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between items-center py-6">
-            <h1 class="text-3xl font-bold text-gray-900">Admin Panel</h1>
-            <div>
+            <h1 class="text-3xl font-bold text-white">Admin Panel</h1>
+            <div class="flex items-center space-x-4">
               <button
                 v-if="activeTab === 'posts' && activePostTab === 'list'"
                 @click="handleCreateNewPost"
-                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                class="px-4 py-2 rounded-md bg-[#84ff61] text-sm font-semibold text-black shadow-lg hover:brightness-95 active:brightness-90 transition-all"
               >
                 Create New Post
               </button>
               <button
                 v-if="activeTab === 'series' && activeSeriesTab === 'list'"
                 @click="handleCreateNewSeries"
-                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                class="px-4 py-2 rounded-md bg-[#84ff61] text-sm font-semibold text-black shadow-lg hover:brightness-95 active:brightness-90 transition-all"
               >
                 Create New Series
               </button>
               <button
                 @click="handleLogout"
-                class="ml-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                class="px-4 py-2 rounded-md border border-neutral-700 bg-transparent text-sm text-gray-300 hover:bg-neutral-800/60 transition-colors"
               >
                 Logout
               </button>
             </div>
           </div>
-          <div class="flex border-b">
+          <div class="flex border-b border-neutral-800">
             <button
               @click="activeTab = 'posts'"
-              :class="{ 'border-b-2 border-blue-500': activeTab === 'posts' }"
-              class="px-4 py-2 text-sm font-medium"
+              :class="[
+                'px-4 py-3 text-sm font-medium transition-colors',
+                activeTab === 'posts'
+                  ? 'border-b-2 border-[#84ff61] text-[#84ff61]'
+                  : 'text-gray-400 hover:text-white',
+              ]"
             >
               Posts
             </button>
             <button
               @click="activeTab = 'series'"
-              :class="{ 'border-b-2 border-blue-500': activeTab === 'series' }"
-              class="px-4 py-2 text-sm font-medium"
+              :class="[
+                'px-4 py-3 text-sm font-medium transition-colors',
+                activeTab === 'series'
+                  ? 'border-b-2 border-[#84ff61] text-[#84ff61]'
+                  : 'text-gray-400 hover:text-white',
+              ]"
             >
               Series
             </button>
             <button
               @click="activeTab = 'stats'"
-              :class="{ 'border-b-2 border-blue-500': activeTab === 'stats' }"
-              class="px-4 py-2 text-sm font-medium"
+              :class="[
+                'px-4 py-3 text-sm font-medium transition-colors',
+                activeTab === 'stats'
+                  ? 'border-b-2 border-[#84ff61] text-[#84ff61]'
+                  : 'text-gray-400 hover:text-white',
+              ]"
             >
               Statistics
             </button>
@@ -132,35 +145,35 @@ onMounted(async () => {
 
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div v-if="activeTab === 'posts'">
-          <div v-if="activePostTab === 'list'" class="space-y-4">
+          <div v-if="activePostTab === 'list'" class="space-y-6">
             <!-- Filter Section -->
             <div
-              class="bg-white p-4 rounded-lg shadow flex items-center space-x-4"
+              class="bg-[#121417] p-4 rounded-xl border border-neutral-800 flex items-center space-x-4"
             >
               <div class="flex-1">
                 <label
                   for="search"
-                  class="block text-sm font-medium text-gray-700"
+                  class="block text-xs uppercase tracking-wide text-gray-400 mb-2"
                   >Search by Title</label
                 >
                 <input
                   type="text"
                   v-model="searchTerm"
                   id="search"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                  class="w-full rounded-md border border-neutral-700 bg-[#0f1114] px-3 py-2 text-sm outline-none focus:border-[#84ff61] focus:ring-2 focus:ring-[#84ff61]/30 placeholder:text-gray-500"
                   placeholder="Post title..."
                 />
               </div>
               <div class="flex-1">
                 <label
                   for="category"
-                  class="block text-sm font-medium text-gray-700"
+                  class="block text-xs uppercase tracking-wide text-gray-400 mb-2"
                   >Category</label
                 >
                 <select
                   v-model="selectedCategory"
                   id="category"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                  class="w-full rounded-md border border-neutral-700 bg-[#0f1114] px-3 py-2 text-sm outline-none focus:border-[#84ff61] focus:ring-2 focus:ring-[#84ff61]/30 placeholder:text-gray-500"
                 >
                   <option v-for="cat in allCategories" :key="cat" :value="cat">
                     {{ cat || "All Categories" }}
@@ -168,13 +181,15 @@ onMounted(async () => {
                 </select>
               </div>
               <div class="flex-1">
-                <label for="tag" class="block text-sm font-medium text-gray-700"
+                <label
+                  for="tag"
+                  class="block text-xs uppercase tracking-wide text-gray-400 mb-2"
                   >Tag</label
                 >
                 <select
                   v-model="selectedTag"
                   id="tag"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                  class="w-full rounded-md border border-neutral-700 bg-[#0f1114] px-3 py-2 text-sm outline-none focus:border-[#84ff61] focus:ring-2 focus:ring-[#84ff61]/30 placeholder:text-gray-500"
                 >
                   <option v-for="tag in allTags" :key="tag" :value="tag">
                     {{ tag || "All Tags" }}
