@@ -207,43 +207,60 @@ const uploadImage = async (event: Event) => {
 </script>
 
 <style>
+/* General container for the editor */
 .editor-container {
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: 1px solid #404040; /* neutral-700 */
+  border-radius: 8px;
+  background-color: #0f1114; /* Darker background for the whole container */
+  color: #d1d5db; /* gray-300 for default text */
+  overflow: hidden;
 }
 
+/* Toolbar styling */
 .toolbar {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
-  background-color: #f9f9f9;
+  gap: 8px;
+  padding: 12px;
+  border-bottom: 1px solid #404040; /* neutral-700 */
+  background-color: #121417; /* Slightly lighter than the editor bg */
 }
 
 .toolbar button {
-  padding: 5px 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background-color: #fff;
+  padding: 6px 12px;
+  border: 1px solid #404040; /* neutral-700 */
+  border-radius: 6px;
+  background-color: transparent;
+  color: #d1d5db; /* gray-300 */
   cursor: pointer;
   font-size: 14px;
+  transition: all 0.2s ease-in-out;
+}
+
+.toolbar button:hover {
+  background-color: #404040; /* neutral-700 */
+  color: #fff;
 }
 
 .toolbar button.is-active {
-  background-color: #e0e0e0;
-  border-color: #a0a0a0;
+  background-color: rgba(132, 255, 97, 0.1);
+  border-color: #84ff61;
+  color: #84ff61;
+  font-weight: bold;
 }
 
 .toolbar button:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
+  background-color: transparent;
 }
 
+/* ProseMirror editor content area */
 .editor-container .ProseMirror {
-  padding: 15px;
-  min-height: 300px;
+  padding: 16px;
+  min-height: 400px;
   outline: none;
+  line-height: 1.6;
 }
 
 .editor-container .ProseMirror > *:first-child {
@@ -254,9 +271,13 @@ const uploadImage = async (event: Event) => {
   margin-bottom: 0;
 }
 
-/* Basic styling for elements */
+/* Styling for elements inside the editor */
+.editor-container .ProseMirror p {
+  color: #d1d5db; /* gray-300 */
+}
+
 .editor-container .ProseMirror a {
-  color: #007bff;
+  color: #84ff61;
   text-decoration: underline;
   cursor: pointer;
 }
@@ -266,12 +287,17 @@ const uploadImage = async (event: Event) => {
   height: auto;
   display: block;
   margin: 1rem 0;
+  border-radius: 8px;
+  border: 1px solid #404040; /* neutral-700 */
 }
 
 .editor-container .ProseMirror h1,
 .editor-container .ProseMirror h2,
 .editor-container .ProseMirror h3 {
-  font-weight: bold;
+  color: #fff;
+  font-weight: 600;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
 }
 
 .editor-container .ProseMirror h1 {
@@ -281,40 +307,52 @@ const uploadImage = async (event: Event) => {
   font-size: 1.5em;
 }
 .editor-container .ProseMirror h3 {
-  font-size: 1.17em;
+  font-size: 1.25em;
 }
 
 .editor-container .ProseMirror ul,
 .editor-container .ProseMirror ol {
   padding-left: 20px;
+  color: #d1d5db; /* gray-300 */
 }
 
 .editor-container .ProseMirror blockquote {
-  border-left: 3px solid #ccc;
+  border-left: 3px solid #84ff61;
   margin-left: 1rem;
   padding-left: 1rem;
   font-style: italic;
+  color: #a1a1aa; /* neutral-400 */
 }
 
 .editor-container .ProseMirror code {
-  background-color: #f5f5f5;
+  background-color: rgba(132, 255, 97, 0.1);
+  color: #84ff61;
   padding: 0.2em 0.4em;
-  border-radius: 3px;
+  border-radius: 4px;
   font-family: "JetBrainsMono", monospace;
+  font-size: 0.9em;
 }
 
 .editor-container .ProseMirror pre {
-  background: #0d0d0d;
-  color: #fff;
+  background: #0c0f12;
+  color: #d1d5db; /* gray-300 */
   font-family: "JetBrainsMono", monospace;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #404040; /* neutral-700 */
+  margin: 1rem 0;
 }
 
 .editor-container .ProseMirror pre code {
   color: inherit;
   padding: 0;
   background: none;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
+}
+
+.editor-container .ProseMirror hr {
+  border: none;
+  border-top: 1px solid #404040; /* neutral-700 */
+  margin: 1.5rem 0;
 }
 </style>
