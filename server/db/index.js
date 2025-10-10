@@ -63,10 +63,27 @@ export const initDb = async () => {
       );
     `);
 
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS settings (
+        key TEXT PRIMARY KEY,
+        value TEXT
+      );
+    `);
+
     // Insert default categories if they don't exist
     const defaultCategories = ['announcement', 'tutorials', 'programming', 'design', 'technology'];
     for (const category of defaultCategories) {
       await pool.query('INSERT INTO categories (name) VALUES ($1) ON CONFLICT (name) DO NOTHING', [category]);
+    }
+
+    // Insert default settings if they don't exist
+    const defaultSettings = {
+      'blog_title': 'My Awesome Blog',
+      'footer_text': '&copy; 2024 My Awesome Blog. All rights reserved.'
+    };
+
+    for (const [key, value] of Object.entries(defaultSettings)) {
+      await pool.query('INSERT INTO settings (key, value) VALUES ($1, $2) ON CONFLICT (key) DO NOTHING', [key, value]);
     }
 
     const hash = await bcrypt.hash('JDnn26hg', saltRounds);

@@ -13,9 +13,10 @@ import SeriesForm from "../components/admin/SeriesForm.vue";
 import Statistics from "../components/admin/Statistics.vue";
 import CommentList from "../components/admin/CommentList.vue";
 import CategoryManager from "../components/admin/CategoryManager.vue";
+import SettingsManager from "../components/admin/SettingsManager.vue";
 
 const router = useRouter();
-const activeTab = ref<"posts" | "series" | "stats" | "comments" | "categories">("posts");
+const activeTab = ref<"posts" | "series" | "stats" | "comments" | "categories" | "settings">("posts");
 
 const {
   isAuthenticated,
@@ -163,6 +164,17 @@ onMounted(async () => {
             >
               Categories
             </button>
+            <button
+              @click="activeTab = 'settings'"
+              :class="[
+                'px-4 py-3 text-sm font-medium transition-colors',
+                activeTab === 'settings'
+                  ? 'border-b-2 border-[#84ff61] text-[#84ff61]'
+                  : 'text-gray-400 hover:text-white',
+              ]"
+            >
+              Settings
+            </button>
           </div>
         </div>
       </div>
@@ -258,6 +270,9 @@ onMounted(async () => {
         </div>
         <div v-if="activeTab === 'categories'">
           <CategoryManager />
+        </div>
+        <div v-if="activeTab === 'settings'">
+          <SettingsManager />
         </div>
       </div>
     </div>
