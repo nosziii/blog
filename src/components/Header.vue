@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
+import { useSettings } from "@/composables/useSettings";
+
+const { settings } = useSettings();
 </script>
 
 <template>
@@ -12,7 +15,7 @@ import { RouterLink } from "vue-router";
           >
             IF
           </div>
-          <span class="text-xl font-bold text-white">InFosss Blog</span>
+          <span class="text-xl font-bold text-white">{{ settings.blog_title }}</span>
         </RouterLink>
 
         <nav class="flex items-center space-x-6">
